@@ -1,7 +1,13 @@
 #include "HashTable.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
+
+HashTable::HashTable()
+{
+    readPrimes();
+}
 
 HashTable::HashTable(unsigned int sz)
 {
@@ -33,7 +39,7 @@ int* HashTable::primeSeq()
 {
     if (hashSize <= 0)
         return nullptr;
-    int * result = new int[hashSize];
+    int* result = new int[hashSize];
     int count = 0;
     int ii = 2;
     while (count < hashSize)
@@ -109,23 +115,50 @@ bool* HashTable::bitSeq()
 void HashTable::writePrimes()
 {
     std::ofstream file;
-    file.open("prime.txt", std::ofstream::binary);
+    file.open("prime.dat", std::ofstream::binary);
     unsigned int feeder[2];
     feeder[1] = 0; //null terminator for when location is cast to char*
     if(file.is_open())
     {
-        std::cout << "prime.txt opened for writing" << std::endl;
+        std::cout << "prime.dat opened for writing" << std::endl;
         primes = primeSeq();
         for(unsigned int ii = 0; ii < hashSize; ii++)
         {
             *feeder = primes[ii];
             file.write((char*)feeder, sizeof(int));
         }
+        *feeder = 0;
+        file.write((char*)feeder, sizeof(int));
         file.close();
-        std::cout << "prime.txt closed for writing" << std::endl;
+        std::cout << "prime.dat closed for writing" << std::endl;
     }
 }
 
 void HashTable::readPrimes()
 {
+   std::ifstream file;
+   file.open("prime.dat", std::ifstream::binary);
+   if(file.is_open())
+   {
+       std::cout << "prime.dat opened for reading" << std::endl;
+       std::stringstream strStream;
+       strStream << file.rdbuf();
+       std::string strPrimes = strStream.str();
+       hashSize = ( strPrimes.length() / (sizeof(int) / sizeof(char)) ) - 1;
+       
+       std::cout << hashSize << " prime numbers read from prime.dat" << std::endl;
+       
+       primes = new int[hashSize];
+       
+       const char* bitWisePrimes = strPrimes.c_str();
+       int* fromFile = (int*)bitWisePrimes;
+       
+       for(int ii = 0; ii < hashSize; ii++)
+       {
+           primes[ii] = fromFile[ii];
+       }
+       
+       file.close();
+       std::cout << "prime.dat closed for reading" << std::endl;
+   }
 }

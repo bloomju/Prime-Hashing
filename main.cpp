@@ -11,7 +11,10 @@ int main (int argc, char** argv)
 {
 
     if (argc != 3)
+    {
+        cout << "invalid inputs" << endl;
         return 1;
+    }
     
     string arg1 = argv[1];
     
@@ -24,7 +27,8 @@ int main (int argc, char** argv)
     }
     else if (arg1 == "read")
     {
-        
+        HashTable* ht = new HashTable();
+        delete ht;
     }
     else
     {
