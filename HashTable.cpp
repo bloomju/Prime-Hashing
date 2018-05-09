@@ -7,7 +7,6 @@ HashTable::HashTable(unsigned int sz)
 {
     hashSize = sz;
     writePrimes();
-    std::cout << sz << " terms of prime sequence initialized" << std::endl;
     bits = bitSeq();
     std:: cout << "Bits initialized" << std::endl;
 }
@@ -46,6 +45,7 @@ int* HashTable::primeSeq()
         }
         ii++;
     }
+    std::cout << hashSize << " terms of prime sequence initialized" << std::endl;
     return result;
 }
 
@@ -108,7 +108,6 @@ bool* HashTable::bitSeq()
 
 void HashTable::writePrimes()
 {
-    primes = primeSeq();
     std::ofstream file;
     file.open("prime.txt", std::ofstream::binary);
     unsigned int feeder[2];
@@ -116,6 +115,7 @@ void HashTable::writePrimes()
     if(file.is_open())
     {
         std::cout << "prime.txt opened for writing" << std::endl;
+        primes = primeSeq();
         for(unsigned int ii = 0; ii < hashSize; ii++)
         {
             *feeder = primes[ii];
