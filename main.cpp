@@ -10,11 +10,27 @@ using std::string;
 int main (int argc, char** argv)
 {
 
-    if (argc != 2)
+    if (argc != 3)
         return 1;
+    
     string arg1 = argv[1];
-    double input1 = std::stod(arg1);
-
+    
+    string arg2 = argv[2];
+    int input2 = std::stoi(arg2);
+    if(arg1 == "write")
+    {
+        HashTable* ht = new HashTable(input2);
+        delete ht;
+    }
+    else if (arg1 == "read")
+    {
+        
+    }
+    else
+    {
+        cout << "invalid inputs" << endl;
+        return 1;
+    }
 /*
     string arg2 = argv[2];
     int input2 = std::stoi(arg2); 
@@ -27,6 +43,10 @@ int main (int argc, char** argv)
         cout << ht->nhash(input2, ii) << std::endl;
     delete ht;
 */
+
+
+
+/*
     HashTable* ht = new HashTable(50000);
     double sum = 0;
     for(int jj = 1; jj < 50; jj++)
@@ -55,5 +75,6 @@ int main (int argc, char** argv)
     cout << "mean: " << sum / 50 << endl;
     //cout << "pi approximately = " << 4*sum / 50 << endl;
     delete ht;
+*/
     return 0;
 }

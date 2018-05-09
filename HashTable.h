@@ -4,12 +4,17 @@
 class HashTable
 {
 public:
+    /*
+     * Default constructor reads from file to initialize
+     */
+    HashTable();
+
     /**
      * Constructor takes in an int for the size of the prime sequence
      */
     HashTable(const unsigned int sz);
     ~HashTable();
-
+    
     /**
      * Takes single integer input
      * Determines if int is prime
@@ -20,7 +25,6 @@ public:
      * Returns primes sequence with hashSize terms
      */
     int* primeSeq();
-
     /**
      * takes single positive integer
      * returns number based on prime modulo sequence
@@ -48,11 +52,20 @@ private:
     /*************************************
      * Package for prime hashing process *
      ************************************/
-     int hashSize;
-     int* primes;
-     bool* bits;
-     bool* bitSeq();
-     
+    unsigned int hashSize;
+    int* primes;
+    bool* bits;
+    bool* bitSeq();
+    /*
+     * Writes given number of prime sequence to file
+     */
+    void writePrimes();      
+    
+    /*
+     * Reads prime sequence from file
+     */
+    void readPrimes();
+    
     /*********************
      * Package for table *
      ********************/

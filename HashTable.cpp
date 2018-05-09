@@ -1,10 +1,12 @@
 #include "HashTable.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 
 HashTable::HashTable(unsigned int sz)
 {
     hashSize = sz;
-    primes = primeSeq();
+    writePrimes();
     std::cout << sz << " terms of prime sequence initialized" << std::endl;
     bits = bitSeq();
     std:: cout << "Bits initialized" << std::endl;
@@ -85,21 +87,45 @@ bool* HashTable::bitSeq()
     bool* result = new bool[3*hashSize-5];
 
     int next = 0;  
-    for(int ii = 2; ii < hashSize; ii++ )
+    for(unsigned int ii = 2; ii < hashSize; ii++ )
     {
         result[next] = ((primes[ii] % 3) == 1);
         next++;
     }
-    for(int ii = 1; ii < hashSize; ii++ )
+    for(unsigned int ii = 1; ii < hashSize; ii++ )
     {
         result[next] = ((primes[ii] % 4) == 1);
         next++;
     }
-    for(int ii = 2; ii < hashSize; ii++ )
+    for(unsigned int ii = 2; ii < hashSize; ii++ )
     {
         result[next] = ((primes[ii] % 6) == 1);
         next++;
     }
 
     return result;
+}
+
+void HashTable::writePrimes()
+{
+    primes = primeSeq();
+    std::ofstream file;
+    file.open("prime.txt", std::ofstream::binary);
+    unsigned int feeder[2];
+    feeder[1] = 0; //null terminator for when location is cast to char*
+    if(file.is_open())
+    {
+        std::cout << "prime.txt opened for writing" << std::endl;
+        for(unsigned int ii = 0; ii < hashSize; ii++)
+        {
+            *feeder = primes[ii];
+            file.write((char*)feeder, sizeof(int));
+        }
+        file.close();
+        std::cout << "prime.txt closed for writing" << std::endl;
+    }
+}
+
+void HashTable::readPrimes()
+{
 }
