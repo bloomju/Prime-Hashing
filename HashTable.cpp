@@ -6,7 +6,10 @@
 
 HashTable::HashTable()
 {
+    //initializes primes and hashSize
     readPrimes();
+    bits = bitSeq();
+    std::cout << "Bits initialized" << std::endl;
 }
 
 HashTable::HashTable(unsigned int sz)
@@ -14,7 +17,7 @@ HashTable::HashTable(unsigned int sz)
     hashSize = sz;
     writePrimes();
     bits = bitSeq();
-    std:: cout << "Bits initialized" << std::endl;
+    std::cout << "Bits initialized" << std::endl;
 }
 
 HashTable::~HashTable()
@@ -55,6 +58,11 @@ int* HashTable::primeSeq()
     return result;
 }
 
+int HashTable::getPrime(int ii)
+{
+    return primes[ii];
+}
+
 unsigned int HashTable::halfHash(unsigned int input)
 {
     if(hashSize < 34)
@@ -63,7 +71,8 @@ unsigned int HashTable::halfHash(unsigned int input)
     int mul = 1;
     for(int ii = 0; ii < 32; ii++) 
     {
-        result+= (mul*bits[(input+ii)%(3*hashSize-5)]);
+        //result+= (mul*bits[(input+ii)%(3*hashSize-5)]);
+        result += (mul*bits[(input+ii)%(hashSize-2)]);
         mul *= 2;
     }
     return result;
@@ -90,26 +99,37 @@ unsigned int HashTable::nhash(unsigned int input, unsigned int comps)
 
 bool* HashTable::bitSeq()
 {
-    bool* result = new bool[3*hashSize-5];
+    //bool* result = new bool[3*hashSize-5];
 
+    bool* result = new bool[hashSize-2];
+    
     int next = 0;  
+    /*
     for(unsigned int ii = 2; ii < hashSize; ii++ )
     {
         result[next] = ((primes[ii] % 3) == 1);
         next++;
     }
+    */
     for(unsigned int ii = 1; ii < hashSize; ii++ )
     {
         result[next] = ((primes[ii] % 4) == 1);
         next++;
     }
+    /*
+    
     for(unsigned int ii = 2; ii < hashSize; ii++ )
     {
         result[next] = ((primes[ii] % 6) == 1);
         next++;
     }
-
+    */
     return result;
+}
+
+bool HashTable::getBit(int ii)
+{
+    return bits[ii];
 }
 
 void HashTable::writePrimes()

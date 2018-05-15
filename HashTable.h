@@ -47,7 +47,15 @@ public:
      * returns an unreasonably hard to predict number
      */
     unsigned int nhash(unsigned int, unsigned int);
-
+    
+    /*
+     * getter function for prime sequence
+     */
+    int getPrime(int);
+    /*
+     * getter function for bit sequence
+     */
+    bool getBit(int);
 private:
     /*************************************
      * Package for prime hashing process *
