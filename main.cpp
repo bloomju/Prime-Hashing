@@ -1,14 +1,17 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <time.h>
 #include "HashTable.h"
 
 using std::cout;
 using std::endl;
 using std::string;
 
-
 void readProc(int);
 void demoProc(int);
+void compareProc(int);
+
 
 int main (int argc, char** argv)
 {
@@ -35,6 +38,10 @@ int main (int argc, char** argv)
     else if(arg1 == "demo")
     {
         demoProc(input2);
+    }
+    else if(arg1 == "compare")
+    {
+        compareProc(input2);
     }
     else
     {
@@ -104,4 +111,44 @@ void demoProc(int num)
     cout << endl;
     
     delete ht;
+}
+
+
+
+void compareProc(int num)
+{
+    srand(time(NULL));
+    int* intervalCounts = new int[10];
+    for(int ii=0; ii < 10; ii++)
+        intervalCounts[ii] = 0;
+    
+    unsigned int usMax = 0;
+    usMax--;
+    for(int ii=0; ii < num; ii++)
+    {
+        unsigned int newRand = 0;
+        int mul = 1;
+        for(int jj=0; jj < 32; jj++)
+        {
+            newRand += (mul*(rand()%2));
+            mul*= 2;
+        }
+
+        for(int jj=0; jj < 10; jj++)
+        {
+            if(newRand >= (0.1*jj)*usMax && newRand <= (0.1*(jj+1))*usMax)
+                intervalCounts[jj]++;
+        }
+    }
+
+    cout << "The distribution of random numbers 1 and 0 is approximately: " << endl;
+
+    for(int ii = 0; ii < 10; ii++)
+    {
+        cout << "[" << 0.1*ii << "," << 0.1*(ii+1) << "]: "
+            << ((double)intervalCounts[ii]) / num << endl;
+    }
+
+    delete [] intervalCounts;
+
 }
