@@ -1,6 +1,7 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
+#include "PrimeGenerator.h"
 class HashTable
 {
 public:
@@ -13,6 +14,8 @@ public:
      * Constructor takes in an int for the size of the prime sequence
      */
     HashTable(const unsigned int sz);
+    
+    HashTable(PrimeGenerator*);
     ~HashTable();
     
     /**
@@ -24,7 +27,7 @@ public:
     /**
      * Returns primes sequence with hashSize terms
      */
-    int* primeSeq();
+    unsigned int* primeSeq();
     /**
      * takes single positive integer
      * returns number based on prime modulo sequence
@@ -61,7 +64,7 @@ private:
      * Package for prime hashing process *
      ************************************/
     unsigned int hashSize;
-    int* primes;
+    unsigned int* primes;
     bool* bits;
     bool* bitSeq();
     /*
@@ -69,6 +72,12 @@ private:
      */
     void writePrimes();      
     
+    /*
+     * Writes prime sequence to file from Prime Generator
+     * using linked-list method
+     */
+    void writeFromLink(PrimeGenerator*);
+
     /*
      * Reads prime sequence from file
      */

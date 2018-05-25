@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <time.h>
 #include "HashTable.h"
-
+#include "PrimeGenerator.h"
 using std::cout;
 using std::endl;
 using std::string;
@@ -11,11 +11,10 @@ using std::string;
 void readProc(int);
 void demoProc(int);
 void compareProc(int);
-
+void linkProc(int);
 
 int main (int argc, char** argv)
 {
-
     if (argc != 3)
     {
         cout << "invalid inputs" << endl;
@@ -28,7 +27,10 @@ int main (int argc, char** argv)
     int input2 = std::stoi(arg2);
     if(arg1 == "write")
     {
+        time_t timeBefore = time(NULL);
         HashTable* ht = new HashTable(input2);
+        time_t elapsed = time(NULL) - timeBefore;
+        cout << "\nElapsed time: " << elapsed / 60.0 << "minutes" << endl;
         delete ht;
     }
     else if (arg1 == "read")
@@ -42,6 +44,10 @@ int main (int argc, char** argv)
     else if(arg1 == "compare")
     {
         compareProc(input2);
+    }
+    else if(arg1 == "link")
+    {
+        linkProc(input2);
     }
     else
     {
@@ -67,7 +73,7 @@ void readProc(int num)
         //unsigned integer max value
         usMax--;
 
-        unsigned int rand = ht->dhash(ii);
+        unsigned int rand = ht->halfHash(ii);
         for(int jj = 0; jj < 10; jj++)
         {
             if(rand >= (0.1*jj)*usMax && rand <= (0.1*(jj+1))*usMax)
@@ -151,4 +157,14 @@ void compareProc(int num)
 
     delete [] intervalCounts;
 
+}
+
+
+void linkProc(int num)
+{
+    time_t timeBefore = time(NULL);
+    PrimeGenerator* pg = new PrimeGenerator(num);
+    HashTable* ht = new HashTable(pg);
+    time_t elapsed = time(NULL) - timeBefore;
+    cout << "\nElapsed time: " << elapsed / 60.0 << "minutes" << endl;
 }

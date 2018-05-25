@@ -20,6 +20,15 @@ HashTable::HashTable(unsigned int sz)
     std::cout << "Bits initialized" << std::endl;
 }
 
+HashTable::HashTable(PrimeGenerator* pg)
+{
+    hashSize = pg->getSize();
+    writeFromLink(pg);
+    bits = bitSeq();
+    std::cout << "Bits initialized" << std::endl;
+}
+
+
 HashTable::~HashTable()
 {
     delete [] primes;
@@ -30,6 +39,8 @@ HashTable::~HashTable()
 
 bool HashTable::isPrime (int pp)
 {
+    if(pp%2==0&& pp != 2)
+        return false;
     for(int ii = 2; ii < pp; ii++)
     {
         if (pp % ii == 0)
@@ -38,13 +49,13 @@ bool HashTable::isPrime (int pp)
     return pp > 1;
 }
 
-int* HashTable::primeSeq()
+unsigned int* HashTable::primeSeq()
 {
     if (hashSize <= 0)
         return nullptr;
-    int* result = new int[hashSize];
-    int count = 0;
-    int ii = 2;
+    unsigned int* result = new unsigned int[hashSize];
+    unsigned int count = 0;
+    unsigned int ii = 2;
     while (count < hashSize)
     {
         if(isPrime(ii))
@@ -154,6 +165,28 @@ void HashTable::writePrimes()
     }
 }
 
+void HashTable::writeFromLink(PrimeGenerator* pg)
+{
+    std::ofstream file;
+    file.open("prime.dat", std::ofstream::binary);
+    unsigned int feeder[2];
+    feeder[1] = 0; //null terminator for when location is cast to char*
+    if(file.is_open())
+    {
+        std::cout << "prime.dat opened for writing" << std::endl;
+        primes = pg->getPrimes();
+        for(unsigned int ii = 0; ii < hashSize; ii++)
+        {
+            *feeder = primes[ii];
+            file.write((char*)feeder, sizeof(int));
+        }
+        *feeder = 0;
+        file.write((char*)feeder, sizeof(int));
+        file.close();
+        std::cout << "prime.dat closed for writing" << std::endl;
+    }
+}
+
 void HashTable::readPrimes()
 {
    std::ifstream file;
@@ -168,7 +201,7 @@ void HashTable::readPrimes()
        
        std::cout << hashSize << " prime numbers read from prime.dat" << std::endl;
        
-       primes = new int[hashSize];
+       primes = new unsigned int[hashSize];
        
        const char* bitWisePrimes = strPrimes.c_str();
        int* fromFile = (int*)bitWisePrimes;
