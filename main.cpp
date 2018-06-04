@@ -61,8 +61,8 @@ int main (int argc, char** argv)
 void readProc(int num)
 {
     HashTable* ht = new HashTable();
-    int* intervalCounts = new int[10];
-    for(int ii=0; ii < 10; ii++)
+    int* intervalCounts = new int[8];
+    for(int ii=0; ii < 8; ii++)
         intervalCounts[ii] = 0;
     
     cout << "Preparing to count proportions in intervals of length 0.1\n" << endl;
@@ -74,18 +74,18 @@ void readProc(int num)
         usMax--;
 
         unsigned int rand = ht->halfHash(ii);
-        for(int jj = 0; jj < 10; jj++)
+        for(int jj = 0; jj < 8; jj++)
         {
-            if(rand >= (0.1*jj)*usMax && rand <= (0.1*(jj+1))*usMax)
+            if(rand >= (0.125*jj)*usMax && rand <= (0.125*(jj+1))*usMax)
                 intervalCounts[jj]++;
             
         }
     }
 
     cout << "The distribution of prime modulus is approximately: " << endl;
-    for(int ii = 0; ii < 10; ii++)
+    for(int ii = 0; ii < 8; ii++)
     {
-        cout << "[" << 0.1*ii << "," << 0.1*(ii+1) << "]: "
+        cout << "[" << 0.125*ii << "," << 0.125*(ii+1) << "]: "
             << ((double)intervalCounts[ii]) / num << endl;
     }
 
